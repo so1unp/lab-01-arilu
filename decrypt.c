@@ -3,8 +3,9 @@
 
 int main(int argc, char *argv[])
 {
-    // Agregar código aquí.
+    // Bucle mientras no se lea EOF
 
-    // Termina la ejecución del programa.
+    //Leer un byte
+    //Ignorar los siguientes 7 bytes
     exit(EXIT_SUCCESS);
 }

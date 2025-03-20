@@ -3,8 +3,10 @@
 
 int main(int argc, char *argv[])
 {
-    // Agregar código aquí.
+    //Bucle mientras no se lea eof
 
-    // Termina la ejecución del programa.
+    //Leer un byte con read()
+    //Poner 7 bytes aleatorios con write()
+
     exit(EXIT_SUCCESS);
 }
