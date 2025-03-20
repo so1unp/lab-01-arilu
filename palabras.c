@@ -6,12 +6,26 @@
 
 int main()
 {
-    //Cada palabra se va a almacenar en buffer
-    char buffer[MAX_LONGITUD_PALABRA];
+    int c;
     // El programa termina con ctrl + C
-    // Permite palabras de hasta 99 caracteres inclusive(tener en cuenta /0)
-    while (scanf("%99s", buffer) != EOF) {
-        printf( "%s \n", buffer);
+    c = getchar();
+    //En el buffer se almacena la palabra temporalmente
+    char buffer[MAX_LONGITUD_PALABRA];
+    while(c != EOF){
+        int k = 0;
+        while(c != ' ' && c != '\n'){  
+            buffer[k] = (char) c; 
+            k++;
+            c = getchar();
+        }
+        buffer[k] = '\0';
+
+        if(k > 0){
+            printf("%s \n", buffer);
+        }
+        
+        c = getchar();
     }
+    
     exit(EXIT_SUCCESS);
 }

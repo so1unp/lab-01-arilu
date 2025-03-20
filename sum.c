@@ -26,7 +26,6 @@ int main(int argc, char *argv[])
         }
         printf("Sumatoria: %d \n", sum);
     }
-    
     exit(EXIT_SUCCESS);
 }
 
