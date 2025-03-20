@@ -5,17 +5,23 @@ int main(int argc, char *argv[])
 {
     int sum = 0;
     int c;
+    int aux;
 
     if(argc == 1){
-        //Mientras no se ingrese ctrl + D 
-        while ((c = getchar()) != EOF) {
-            //En la tabla ASCII los car 0 a 9 son consecutivos
-            //0 = 48 
-            //9 = 57
-            if (c >= '0' && c <= '9') {
-                //Se calcula que numero es restando el ascii de 0
-                sum += c - '0';
+        char buffer[100];
+        c = getchar();
+        while(c != EOF){
+            aux = 0;
+            while(c != ' ' && c != '\n' && c != EOF){
+                buffer[aux] = (char) c;
+                aux++;
+                c = getchar();
             }
+            if(aux > 0){
+                buffer[aux] = '\0';
+                sum += atoi(buffer);
+            }
+            c = getchar();
         }
         printf("Sumatoria: %d \n", sum);
         
@@ -26,6 +32,7 @@ int main(int argc, char *argv[])
         }
         printf("Sumatoria: %d \n", sum);
     }
+    
     exit(EXIT_SUCCESS);
 }
 
