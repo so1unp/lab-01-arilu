@@ -10,22 +10,10 @@
 
 // Función para desencriptar un mensaje
 void desencriptarMensaje(const char *mensaje) {
-
-    // Contador: permite saber cuandos caracteres se leyeron
-    int contador = 1;
     
     for (int i = 0; mensaje[i] != '\0'; i++) {
-
-        if (mensaje[i] != '\n') {
-            // Imprime el caracter si ya se leyeron los caracteres aleatorios
-            if ((contador % (NUM_BYTES_RAND +1)) == 0) {
-                printf("%c", mensaje[i]);
-            }
-            contador++;
-        } else {
-            //reinicia el contador y hace la separacion correspondiente (las más comunes)
-            contador = 1; 
-
+        if (((i+1) % (NUM_BYTES_RAND +1)) == 0) {
+            printf("%c", mensaje[i]);
         }
     }
 }
