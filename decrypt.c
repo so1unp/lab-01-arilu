@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX_LONGITUD_PALABRA 100
+#define MAX_LONGITUD_PALABRA 800
 // El número de bytes random antes de un carácter
 #define NUM_BYTES_RAND 7
 
@@ -16,7 +16,7 @@ void desencriptarMensaje(const char *mensaje) {
     
     for (int i = 0; mensaje[i] != '\0'; i++) {
 
-        if (mensaje[i] != ' ' && mensaje[i] != '\n' && mensaje[i] != '\t') {
+        if (mensaje[i] != '\n') {
             // Imprime el caracter si ya se leyeron los caracteres aleatorios
             if ((contador % (NUM_BYTES_RAND +1)) == 0) {
                 printf("%c", mensaje[i]);
@@ -26,19 +26,6 @@ void desencriptarMensaje(const char *mensaje) {
             //reinicia el contador y hace la separacion correspondiente (las más comunes)
             contador = 1; 
 
-            switch(mensaje[i]){
-                case ' ':
-                    printf(" ");
-                    break;
-                case '\n':
-                    printf("\n");
-                    break;
-                case '\t':
-                    printf("\t");
-                    break;
-                default:
-                    break;
-            }
         }
     }
 }
@@ -58,7 +45,7 @@ void leerDesdeEntradaEstandar() {
         index = 0;
 
         //Lee la palabra mientras no sea un salto de linea o un EOF
-        while(car != '\n' && car != EOF && car != '\t'){ 
+        while(car != '\n' && car != EOF){ 
             buffer[index] = (char) car;
             index++;
             car = getchar();

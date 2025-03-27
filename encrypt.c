@@ -4,7 +4,7 @@
 #include <fcntl.h>
 #include <unistd.h> // Para usar write()
 
-#define MAX_LONGITUD 100000
+#define MAX_LONGITUD 100
 #define NUM_BYTES_ALEATORIOS 7
 
 int main(int argc, char *argv[]) {
