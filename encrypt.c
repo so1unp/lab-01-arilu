@@ -19,7 +19,8 @@ int main(int argc, char *argv[]) {
                 int indice = 0; 
                 while (caracter != ' ' && caracter != '\n' && caracter != EOF) {
                     if (indice >= MAX_LONGITUD - 1) { // Validación de longitud
-                        fprintf(stderr, "Error: palabra demasiado larga.\n");
+                        char mensajeError[] = "Error: palabra demasiado larga.\n";
+                        write(STDERR_FILENO, mensajeError, sizeof(mensajeError) - 1); // Escribir en stderr
                         exit(EXIT_FAILURE);
                     }
                     palabra[indice] = (char)caracter;
@@ -32,28 +33,32 @@ int main(int argc, char *argv[]) {
                 for (int i = 0; i < indice; i++) {
                     for (int j = 0; j < NUM_BYTES_ALEATORIOS; j++) {
                         char charAleatorio = (char)((rand() % 95) + 32);
-                        printf("%c", charAleatorio);
+                        write(STDOUT_FILENO, &charAleatorio, 1); // Escribir el byte aleatorio
                     }
-                    printf("%c", palabra[i]);
+                    write(STDOUT_FILENO, &palabra[i], 1); // Escribir el carácter original de la palabra
                 }
-                printf("\n");
-
-                caracter = getchar();
+                char saltoDeLinea = '\n';
+                write(STDOUT_FILENO, &saltoDeLinea, 1); // Escribir un salto de línea
             }
             break;
         }
         case 2: { // Leer mensaje desde argumentos
             char *mensaje = argv[1];
             for (int i = 0; mensaje[i] != '\0'; i++) {
+                // Generar y escribir bytes aleatorios
                 for (int k = 0; k < NUM_BYTES_ALEATORIOS; k++) {
-                    char charAleatorio = (char)((rand() % 95) + 32);
-                    printf("%c", charAleatorio);
+                    char charAleatorio = (char)((rand() % 95) + 32); // ASCII imprimible
+                    write(STDOUT_FILENO, &charAleatorio, 1); // Escribir un byte aleatorio
                 }
-                printf("%c", mensaje[i]);
+                // Escribir el carácter original del mensaje
+                write(STDOUT_FILENO, &mensaje[i], 1); // Escribir el carácter actual
             }
-            printf("\n");
+            // Escribir un salto de línea al final
+            char saltoDeLinea = '\n';
+            write(STDOUT_FILENO, &saltoDeLinea, 1); // Escribir un salto de línea
             break;
         }
+        
         case 3: { // Leer mensaje y guardar en archivo
             int archivoSalida = open(argv[1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
             if (archivoSalida == -1) {
@@ -65,20 +70,24 @@ int main(int argc, char *argv[]) {
             for (int i = 0; mensajeEntrada[i] != '\0'; i++) {
                 for (int j = 0; j < NUM_BYTES_ALEATORIOS; j++) {
                     char charAleatorio = (char)((rand() % 95) + 32);
-                    write(archivoSalida, &charAleatorio, 1); // Escribir un byte aleatorio
+                    write(archivoSalida, &charAleatorio, 1);
                 }
-                write(archivoSalida, &mensajeEntrada[i], 1); // Escribir el carácter original
+                write(archivoSalida, &mensajeEntrada[i], 1);
             }
-            write(archivoSalida, "\n", 1); // Salto de línea
+            char saltoDeLinea = '\n';
+            write(archivoSalida, &saltoDeLinea, 1);
 
             close(archivoSalida);
             break;
         }
         default: {
-            printf("Uso incorrecto. Intenta con 1 o 2 argumentos.\n");
+            char mensjError[] = "Uso incorrecto. Intenta con 1 o 2 argumentos.\n";
+            write(STDIN_FILENO, mensjError, sizeof(mensjError) - 1);
+            
             break;
         }
     }
 
     exit(EXIT_SUCCESS);
 }
+
