@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <fcntl.h>
+#include <unistd.h> // Para usar write()
 
-#define MAX_LONGITUD 100
+#define MAX_LONGITUD 100000
 #define NUM_BYTES_ALEATORIOS 7
 
 int main(int argc, char *argv[]) {
@@ -14,8 +16,12 @@ int main(int argc, char *argv[]) {
             int caracter = getchar();
             char palabra[MAX_LONGITUD];
             while (caracter != EOF) {
-                int indice = 0;
+                int indice = 0; 
                 while (caracter != ' ' && caracter != '\n' && caracter != EOF) {
+                    if (indice >= MAX_LONGITUD - 1) { // Validación de longitud
+                        fprintf(stderr, "Error: palabra demasiado larga.\n");
+                        exit(EXIT_FAILURE);
+                    }
                     palabra[indice] = (char)caracter;
                     indice++;
                     caracter = getchar();
@@ -25,7 +31,7 @@ int main(int argc, char *argv[]) {
                 // Imprimir bytes aleatorios y la palabra
                 for (int i = 0; i < indice; i++) {
                     for (int j = 0; j < NUM_BYTES_ALEATORIOS; j++) {
-                        char charAleatorio = (char)(rand() % 256);
+                        char charAleatorio = (char)((rand() % 95) + 32);
                         printf("%c", charAleatorio);
                     }
                     printf("%c", palabra[i]);
@@ -40,7 +46,7 @@ int main(int argc, char *argv[]) {
             char *mensaje = argv[1];
             for (int i = 0; mensaje[i] != '\0'; i++) {
                 for (int k = 0; k < NUM_BYTES_ALEATORIOS; k++) {
-                    char charAleatorio = (char)(rand() % 256);
+                    char charAleatorio = (char)((rand() % 95) + 32);
                     printf("%c", charAleatorio);
                 }
                 printf("%c", mensaje[i]);
@@ -49,13 +55,8 @@ int main(int argc, char *argv[]) {
             break;
         }
         case 3: { // Leer mensaje y guardar en archivo
-            if (argc != 3) {
-                printf("Uso: %s <archivo> <mensaje>\n", argv[0]);
-                exit(EXIT_FAILURE);
-            }
-
-            FILE *archivoSalida = fopen(argv[1], "w");
-            if (archivoSalida == NULL) {
+            int archivoSalida = open(argv[1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+            if (archivoSalida == -1) {
                 perror("Error al abrir el archivo");
                 exit(EXIT_FAILURE);
             }
@@ -63,18 +64,18 @@ int main(int argc, char *argv[]) {
             char *mensajeEntrada = argv[2];
             for (int i = 0; mensajeEntrada[i] != '\0'; i++) {
                 for (int j = 0; j < NUM_BYTES_ALEATORIOS; j++) {
-                    char charAleatorio = (char)(rand() % 128);
-                    fprintf(archivoSalida, "%c", charAleatorio);
+                    char charAleatorio = (char)((rand() % 95) + 32);
+                    write(archivoSalida, &charAleatorio, 1); // Escribir un byte aleatorio
                 }
-                fprintf(archivoSalida, "%c", mensajeEntrada[i]);
+                write(archivoSalida, &mensajeEntrada[i], 1); // Escribir el carácter original
             }
-            fprintf(archivoSalida, "\n");
+            write(archivoSalida, "\n", 1); // Salto de línea
 
-            fclose(archivoSalida);
+            close(archivoSalida);
             break;
         }
         default: {
-            printf("Uso incorrecto. Intenta con 2 o 3 argumentos.\n");
+            printf("Uso incorrecto. Intenta con 1 o 2 argumentos.\n");
             break;
         }
     }
