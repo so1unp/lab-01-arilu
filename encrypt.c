@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
                 exit(EXIT_FAILURE);
             }
 
-            encriptar(STDOUT_FILENO, buffer, bytesLeidos);
+            encriptar(STDOUT_FILENO, buffer, (size_t)bytesLeidos);
             char saltoDeLinea = '\n'; 
             write(STDOUT_FILENO, &saltoDeLinea, 1);
 
